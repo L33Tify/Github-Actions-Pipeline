@@ -1,0 +1,63 @@
+name: Deploy Frontend + Backend to EKS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # --- Backend image ---
+      - name: Build & push backend
+        env:
+          ECR_REGISTRY: ${{ steps.ecr.outputs.registry }}
+          BACKEND_REPO: my-backend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$BACKEND_REPO:$IMAGE_TAG ./deployment_project/backend
+          docker push $ECR_REGISTRY/$BACKEND_REPO:$IMAGE_TAG
+
+      # --- Frontend image ---
+      - name: Build & push frontend
+        env:
+          ECR_REGISTRY: ${{ steps.ecr.outputs.registry }}
+          FRONTEND_REPO: my-frontend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$FRONTEND_REPO:$IMAGE_TAG ./deployment_project/frontend
+          docker push $ECR_REGISTRY/$FRONTEND_REPO:$IMAGE_TAG
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: '3.12.0'
+
+      - name: Deploy with Helm
+        env:
+          ECR_REGISTRY: ${{ steps.ecr.outputs.registry }}
+        run: |
+          helm upgrade --install user-management-app ./helms/user-management-app \
+            --set global.imageRegistry=$ECR_REGISTRY \
+            --set backend.image.tag=${{ github.sha }} \
+            --set frontend.image.tag=${{ github.sha }} \
+            --wait \
+            --timeout=300s
