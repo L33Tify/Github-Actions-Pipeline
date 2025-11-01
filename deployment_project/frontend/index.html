@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>User Management System</h1>
+            <p>A simple application to manage and search users</p>
+        </header>
+
+        <main>
+            <!-- Search Section -->
+            <section class="search-section">
+                <h2>Search User by ID</h2>
+                <div class="search-form">
+                    <input type="number" id="searchInput" placeholder="Enter User ID (1-25)" min="1" max="50">
+                    <button id="searchBtn">Search</button>
+                    <button id="clearBtn">Clear</button>
+                </div>
+                <div id="searchResult" class="search-result"></div>
+            </section>
+
+            <!-- Users List Section -->
+            <section class="users-section">
+                <div class="section-header">
+                    <h2>All Users</h2>
+                    <button id="refreshBtn">Refresh List</button>
+                </div>
+                <div id="loadingMessage" class="loading">Loading users...</div>
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                <div id="usersList" class="users-list"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 User Management System</p>
+        </footer>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
