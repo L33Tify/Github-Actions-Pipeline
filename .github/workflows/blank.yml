@@ -55,7 +55,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.ecr.outputs.registry }}
         run: |
-          helm upgrade --install user-management-app ./deployment_project/helms/user-management-app \
+          helm upgrade --install user-management-app ./deployment_project/user-management-app \
             --set global.imageRegistry=$ECR_REGISTRY \
             --set backend.image.tag=${{ github.sha }} \
             --set frontend.image.tag=${{ github.sha }} \
