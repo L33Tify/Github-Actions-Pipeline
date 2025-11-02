@@ -48,7 +48,7 @@ The `scripts/helm-aws-install.sh` script automates the aws ingress installation:
 1. **Cluster Verification**: Confirms kubectl context points to the correct EKS cluster
 2. **Infrastructure Discovery**: Retrieves VPC ID and IAM role ARN from AWS
 3. **Load Balancer Controller**: Installs/upgrades AWS Load Balancer Controller via Helm
-4. **Application Deployment**: Deploys the user-management-app Helm chart
+4. **Application Deployment**: Deploys the user-management-app Helm chart - makes sure the cluster has the app already running before running the workflow.
 5. **Health Verification**: Waits for pods, ingress, and load balancer readiness
 6. **Connectivity Test**: Validates the application is accessible via HTTP
 
