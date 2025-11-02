@@ -9,6 +9,9 @@ Has my NAT and ALB for both website access and the ability to access the interne
 ### Private Subnet
 Has my EKS nodes, where I deploy my website.
 
+### Image
+<img src ="infra.png>
+
 ## Website
 
 ### Frontend
@@ -20,3 +23,4 @@ The backend also has a logging mechanism, prints to stdout for future elk intera
 
 ## EKS
 My EKS has an ingress to access the ALB, which aims directly to my frontend's service, that way users can access the website. The backend is only accessable through the frontend.
+
