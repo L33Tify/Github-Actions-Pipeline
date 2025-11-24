@@ -1,4 +1,4 @@
-# IAI Project - User Management Web Application
+# User Management Web Application - CICD Pipeline
 
 A cloud-native user management application demonstrating modern DevOps practices with Infrastructure as Code, containerized applications, and Kubernetes deployment on AWS EKS.
 
